@@ -18,10 +18,6 @@ FSJS project 2 - List Filter and Pagination
 ***/
 const div = document.querySelector('.page');
 const list = document.querySelector('.student-list');
-const listItems = list.children;
-const totalPages = Math.ceil(listItems.length/10);
-
-appendPageLinks();
 
 
 
@@ -42,40 +38,49 @@ appendPageLinks();
    const showPage = (list, page) => {
       const startIndex = (page-1)*10;
       const stopIndex = page*10-1;      
-      for (let i = 0; i < listItems.length; i++) {         
-         listItems[i].style.display = 'none';
+      for (let i = 0; i < list.length; i++) {         
+         list[i].style.display = 'none';
          if (i >= startIndex && i <= stopIndex){
-            listItems[i].style.display = 'block';           
+            list[i].style.display = 'block';           
          }         
-      }      
+      }
    };
 
-showPage(listItems,1);
+
 
 /*** 
    Create the `appendPageLinks function` to generate, append, and add 
    functionality to the pagination buttons.
 ***/
-   function appendPageLinks(){
+   const appendPageLinks = (list) => {      
+      const listItems = list.children;
+      const totalPages = Math.ceil(listItems.length/10);
       const divPage = document.createElement('div');
-      const ul = document.createElement('ul');      
+      const ul = document.createElement('ul');   
+      showPage(listItems,1);
       divPage.className = 'pagination';
       for (let i = 1; i <= totalPages; i++){
          let li = document.createElement('LI');
          let anchor = document.createElement('a');
          anchor.href = '#';
-         anchor.textContent = i;
+         anchor.textContent = i;         
          li.appendChild(anchor);
          ul.appendChild(li);         
       }
       divPage.appendChild(ul);
       div.appendChild(divPage);
       ul.addEventListener('click', (event) => {
-        showPage(listItems, event.target.textContent);
+         const link = document.querySelectorAll('a');
+         for(let i = 0; i<link.length; i++){
+            link[i].className = '';
+         }
+         event.target.className = 'active'; 
+         const a = event.target;
+        showPage(listItems, a.textContent);        
       });
    }
 
-
+appendPageLinks(list);
 
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
